@@ -113,8 +113,8 @@
 
 
 
-        // Bootstrap JS =home
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+   
     
         // Animation on scroll
         document.addEventListener('DOMContentLoaded', function() {
@@ -163,4 +163,5 @@
                 }
             });
         });
+   
     

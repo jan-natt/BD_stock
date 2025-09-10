@@ -1,10 +1,11 @@
- :root {
+:root {
             --primary: #2962ff;
             --secondary: #0039cb;
             --accent: #00c853;
             --dark: #121826;
             --light: #f8f9fa;
             --gray: #e0e0e0;
+             --white: #e107f5ff;
         }
         
         * {
@@ -16,21 +17,21 @@
         
         body {
             overflow-x: hidden;
-            color: var(--dark);
-            background-color: #f5f7fa;
+            color: var(--light);
+            background-color: #120042ff;
         }
         
         /* Navbar */
         .navbar {
             padding: 15px 0;
-            background-color: rgba(255, 255, 255, 0.95) !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: #120042ff !important;
+            box-shadow: 0 2px 10px rgba(61, 68, 131, 0.1);
             transition: all 0.3s ease;
         }
         
         .navbar-brand {
             font-weight: 700;
-            color: var(--primary);
+            color: white;
             font-size: 1.8rem;
         }
         
@@ -38,18 +39,21 @@
             font-weight: 500;
             margin: 0 10px;
             transition: all 0.3s;
+            color:white;
         }
         
         .nav-link:hover {
-            color: var(--primary) !important;
+            color: var(--white) !important;
         }
         
+        
         .btn-signup {
-            background-color: var(--primary);
+            background-color:#652483ff ;
             color: white;
             border-radius: 30px;
             padding: 8px 20px;
             transition: all 0.3s;
+           
         }
         
         .btn-signup:hover {
@@ -60,7 +64,7 @@
         
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #2962ff 0%, #0039cb 100%);
+            background: linear-gradient(135deg, #0c0036ff 0%, #652483ff 100%);
             color: white;
             padding: 100px 0 80px;
             border-radius: 0 0 30px 30px;
@@ -154,7 +158,7 @@
         }
         
         .feature-card {
-            background: white;
+            background: #b796e233 ;
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -189,7 +193,7 @@
         
         /* Market Data Section */
         .market-data {
-            background: var(--dark);
+            background: #b796e233 ;
             color: white;
             padding: 80px 0;
             border-radius: 30px;
@@ -225,7 +229,7 @@
         /* Trading Tools */
         .trading-tools {
             padding: 100px 0;
-            background: linear-gradient(to bottom, #f5f7fa 0%, #e4e8f0 100%);
+            background:  #b796e233 ;
             border-radius: 30px;
         }
         
@@ -245,7 +249,7 @@
         
         .tool-img {
             height: 200px;
-            background: linear-gradient(45deg, #2962ff, #00c853);
+            background: linear-gradient(45deg, #2962ff3f, #ae75c5ff);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -260,7 +264,7 @@
         /* How to Trade Section */
         .how-to-trade {
             padding: 100px 0;
-            background: white;
+            background:  #b796e233 ;
         }
         
         .steps-container {
@@ -272,7 +276,7 @@
             position: absolute;
             height: 70%;
             width: 4px;
-            background: var(--gray);
+            background: #bb78da60;
             left: 35px;
             top: 15%;
             z-index: 1;
@@ -281,7 +285,7 @@
         .progress-bar-fill {
             height: 0%;
             width: 100%;
-            background: var(--primary);
+            background: #bb78da60;
             transition: height 1s ease;
         }
         
@@ -309,7 +313,7 @@
         }
         
         .step-content {
-            background: #f8f9fa;
+            background: #8778da60;
             padding: 25px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
@@ -323,7 +327,7 @@
         /* Licensing Section */
         .licensing {
             padding: 100px 0;
-            background: linear-gradient(to bottom, #f5f7fa 0%, #e4e8f0 100%);
+            background:  #b796e233 ;
         }
         
         .license-card {
@@ -369,7 +373,7 @@
         }
         
         .testimonial-card {
-            background: white;
+            background:  #b796e233 ;
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -413,7 +417,7 @@
         
         /* CTA Section */
         .cta-section {
-            background: linear-gradient(135deg, #2962ff 0%, #0039cb 100%);
+            background:  #b796e233 ;
             color: white;
             padding: 80px 0;
             border-radius: 30px;
@@ -427,9 +431,10 @@
         
         /* Footer */
         footer {
-            background: var(--dark);
+            background: #b796e233 ;
             color: white;
             padding: 70px 0 30px;
+             border-radius: 30px;
         }
         
         .footer-links h5 {
@@ -609,7 +614,7 @@
         /* Financial Partners Section */
         .financial-partners {
             padding: 80px 0;
-            background: white;
+            background:  #b796e233 ;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             margin: 40px 0;
@@ -758,14 +763,12 @@
             }
         }
 
+        
 
 
-        /*aboutus*/
-
-         /* Warning Content 
-
-         .warning-header {
-            background: linear-gradient(135deg, #2962ff 0%, #0039cb 100%);
+        /* Header */
+        .warning-header {
+            background: #301e633a;
             color: white;
             padding: 80px 0 60px;
             text-align: center;
@@ -783,13 +786,14 @@
             margin: 0 auto;
             opacity: 0.9;
         }
-
+        
+        /* Warning Content */
         .warning-content {
             padding: 60px 0;
         }
         
         .warning-card {
-            background: white;
+            background: #301e633a;
             border-radius: 15px;
             padding: 40px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -807,20 +811,20 @@
         .warning-text {
             font-size: 1.1rem;
             margin-bottom: 25px;
-            color: #444;
+            color: #fffcfcff;
         }
         
         .warning-note {
-            background: #fff8e1;
+            background: #301e633a;
             padding: 20px;
             border-radius: 10px;
             margin: 30px 0;
             border-left: 4px solid var(--warning);
         }
         
-        /* Company Details 
+        /* Company Details */
         .company-details {
-            background: #f5f7fa;
+            background: #301e633a;
             padding: 40px;
             border-radius: 15px;
             margin: 40px 0;
@@ -843,7 +847,7 @@
             font-weight: 600;
         }
         
-        /* Restricted Countries 
+        /* Restricted Countries */
         .restricted-countries {
             margin: 40px 0;
         }
@@ -856,14 +860,14 @@
         }
         
         .country-item {
-            background: #f5f7fa;
+            background: #301e633a;
             padding: 10px 20px;
             border-radius: 30px;
             font-size: 0.9rem;
             border: 1px solid var(--gray);
         }
         
-        /* Footer Links 
+        /* Footer Links */
         .footer-links {
             display: flex;
             flex-wrap: wrap;
@@ -884,7 +888,7 @@
             text-decoration: underline;
         }
         
-        /* Copyright 
+        /* Copyright */
         .copyright {
             text-align: center;
             padding: 30px 0;
@@ -893,7 +897,7 @@
             margin-top: 40px;
         }
         
-        /* Responsive Adjustments 
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
             .warning-header h1 {
                 font-size: 2.2rem;

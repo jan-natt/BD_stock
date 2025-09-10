@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('referrals', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('referrer_id');
+            $table->unsignedBigInteger('referred_id');
+            $table->decimal('bonus_amount',20,8)->default(0);
+            $table->enum('status',['pending','approved','rejected'])->default('pending');
             $table->timestamps();
         });
     }

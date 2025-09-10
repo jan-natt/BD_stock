@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('trades', function (Blueprint $table) {
+          Schema::create('trades', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('buy_order_id')->constrained('orders')->onDelete('cascade');
+            $table->foreignId('sell_order_id')->constrained('orders')->onDelete('cascade');
+            $table->foreignId('market_id')->constrained('markets')->onDelete('cascade');
+            $table->decimal('price', 20, 8);
+            $table->decimal('quantity', 20, 8);
+            $table->decimal('fee', 20, 8)->default(0);
+            $table->timestamp('trade_time');
         });
     }
 

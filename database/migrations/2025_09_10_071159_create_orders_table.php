@@ -11,8 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('market_id')->constrained('markets')->onDelete('cascade');
+            $table->enum('order_type', ['buy','sell']);
+            $table->enum('order_kind', ['limit','market','stop-loss','take-profit']);
+            $table->decimal('price', 20, 8)->nullable();
+            $table->decimal('quantity', 20, 8);
+            $table->decimal('filled_quantity', 20, 8)->default(0);
+            $table->enum('status', ['open','filled','partial','cancelled'])->default('open');
             $table->timestamps();
         });
     }

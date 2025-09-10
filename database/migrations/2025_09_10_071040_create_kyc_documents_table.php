@@ -11,8 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kyc_documents', function (Blueprint $table) {
+         Schema::create('kyc_documents', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('document_type');
+            $table->string('document_file');
+            $table->enum('status', ['pending','verified','rejected'])->default('pending');
+            $table->unsignedBigInteger('verified_by')->nullable();
+            $table->timestamp('verified_at')->nullable();
             $table->timestamps();
         });
     }

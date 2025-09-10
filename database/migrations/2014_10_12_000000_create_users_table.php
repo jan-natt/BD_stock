@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('phone')->unique()->nullable();
             $table->string('password');
-            $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
+            $table->enum('user_type', ['admin','buyer','seller','broker','investor','bank','issue_manager']);
+            $table->enum('kyc_status', ['pending','verified','rejected'])->default('pending');
+            $table->string('referral_code')->nullable();
+            $table->unsignedBigInteger('referred_by')->nullable();
+            $table->boolean('two_factor_enabled')->default(false);
+            $table->ipAddress('last_login_ip')->nullable();
             $table->timestamps();
         });
     }

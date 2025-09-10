@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('staking_rewards', function (Blueprint $table) {
+         Schema::create('staking_rewards', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('staking_pool_id')->constrained('staking_pools')->onDelete('cascade');
+            $table->decimal('reward_amount',20,8);
+            $table->timestamp('distributed_at');
         });
     }
 

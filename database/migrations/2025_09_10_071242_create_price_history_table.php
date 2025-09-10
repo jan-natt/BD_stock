@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('price_history', function (Blueprint $table) {
+         Schema::create('price_history', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('asset_id')->constrained('assets')->onDelete('cascade');
+            $table->timestamp('timestamp');
+            $table->decimal('open',20,8);
+            $table->decimal('high',20,8);
+            $table->decimal('low',20,8);
+            $table->decimal('close',20,8);
+            $table->decimal('volume',20,8);
         });
     }
 

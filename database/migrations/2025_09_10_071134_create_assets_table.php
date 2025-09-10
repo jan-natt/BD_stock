@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('assets', function (Blueprint $table) {
             $table->id();
+            $table->string('symbol')->unique();
+            $table->string('name');
+            $table->enum('type', ['stock','crypto','forex','commodity','ipo']);
+            $table->integer('precision')->default(8);
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

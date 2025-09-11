@@ -19,8 +19,8 @@ return new class extends Migration
             $table->decimal('price_per_share', 20, 2);
             $table->bigInteger('total_shares');
             $table->bigInteger('available_shares');
-            $table->timestamp('ipo_start');
-            $table->timestamp('ipo_end');
+            $table->timestamp('ipo_start')->nullable();
+            $table->timestamp('ipo_end')->nullable();
             $table->enum('status',['open','closed','cancelled'])->default('open');
             $table->timestamps();
         });

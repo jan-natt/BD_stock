@@ -426,7 +426,7 @@
     <aside class="sidebar">
         <div class="logo">
             <i class="fas fa-coins" style="color: var(--secondary); font-size: 28px;"></i>
-            <h1>POCKET <span>BROKER</span></h1>
+            <h1>TEADX</h1>
         </div>
         
         <div class="nav-section">

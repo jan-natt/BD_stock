@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Features;
+use Illuminate\Support\Facades\Hash;
+
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -20,16 +22,17 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        return [
+       return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'remember_token' => Str::random(10),
-            'profile_photo_path' => null,
-            'current_team_id' => null,
+            'phone' => $this->faker->unique()->optional()->phoneNumber(),
+            'password' => Hash::make('password'), // all fake users have "password"
+            'user_type' => $this->faker->randomElement(['admin','buyer','seller','broker','investor','bank','issue_manager']),
+            'kyc_status' => $this->faker->randomElement(['pending','verified','rejected']),
+            'referral_code' => strtoupper(Str::random(6)),
+            'referred_by' => null, // Or you can randomly assign later
+            'two_factor_enabled' => $this->faker->boolean(20), // 20% users have 2FA enabled
+            'last_login_ip' => $this->faker->optional()->ipv4(),
         ];
     }
 

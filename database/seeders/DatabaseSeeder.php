@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\KycDocument;
+use App\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +14,33 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+       
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // 5️⃣ Seeder call (সব একবারে, duplicate call remove করা হলো)
+        $this->call([
+            PermissionSeeder::class,
+            RoleSeeder::class,
+            RolePermissionSeeder::class,
+            UserSeeder::class,
+            UserRoleSeeder::class,
+            KycDocumentSeeder::class,
+            WalletSeeder::class,
+            TransactionSeeder::class,
+            PaymentMethodSeeder::class,
+            AssetSeeder::class,
+            MarketSeeder::class,
+            OrderSeeder::class,
+            TradeSeeder::class,
+            IpoSeeder::class,
+            IpoApplicationSeeder::class,
+            PortfolioSeeder::class,
+            PriceHistorySeeder::class,
+            AuditLogSeeder::class,
+            NotificationSeeder::class,
+            SystemSettingSeeder::class,
+            ReferralSeeder::class,
+            StakingPoolSeeder::class,
+            StakingRewardSeeder::class,
+        ]);
     }
 }

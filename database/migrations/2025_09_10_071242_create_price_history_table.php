@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('low',20,8);
             $table->decimal('close',20,8);
             $table->decimal('volume',20,8);
+            $table->timestamps(); // ✅ এটি যোগ করতে হবে
         });
     }
 

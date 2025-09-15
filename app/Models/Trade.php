@@ -54,6 +54,22 @@ class Trade extends Model
     }
 
     /**
+     * Get the buyer that owns the trade.
+     */
+    public function buyer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'buyer_id');
+    }
+
+    /**
+     * Get the seller that owns the trade.
+     */
+    public function seller(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    /**
      * Scope a query to only include trades for a specific market.
      */
     public function scopeForMarket($query, $marketId)

@@ -9,11 +9,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Jetstream\HasTeams;
 use App\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasTeams;
 
     /**
      * The attributes that are mass assignable.
@@ -69,12 +70,26 @@ class User extends Authenticatable
  
 
     public function isAdmin()
-{
-    return $this->user_type === 'admin';
-}
+    {
+        return $this->user_type === 'admin';
+    }
 
+    public function isBuyer()
+    {
+        return $this->user_type === 'buyer';
+    }
 
- public function users(): BelongsToMany
+    public function isSeller()
+    {
+        return $this->user_type === 'seller';
+    }
+
+    public function isIssue_manager()
+    {
+        return $this->user_type === 'issue_manager';
+    }
+
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_roles')
                     ->withTimestamps();
@@ -175,9 +190,9 @@ public function assets(): HasMany
     /**
      * Get the trades for the user (for buyers/sellers)
      */
-    public function trades(): HasMany
+    public function trades()
     {
-        return $this->hasMany(Trade::class);
+        return Trade::involvingUser($this->id);
     }
 
     /**

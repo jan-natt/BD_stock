@@ -16,7 +16,7 @@ class AdminMiddleware
 
         // Check if user has admin role
         if (!auth()->check() || auth()->user()->user_type !== 'admin') {
-    return redirect()->route('home')->with('error', 'You do not have permission to access this page.');
+    return redirect()->route('dashboard')->with('error', 'You do not have permission to access this page.');
 }
 
 

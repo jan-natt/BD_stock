@@ -15,6 +15,25 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <!-- Trading Dropdown -->
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                            Trading
+                            <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+
+                        <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute z-50 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                            <div class="py-1">
+                                <a href="{{ route('orders.create') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Place Order</a>
+                                <a href="{{ route('trades.my-trades') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Trades</a>
+                                <a href="{{ route('trades.my-statistics') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Trade Statistics</a>
+                                <a href="{{ route('portfolio.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Portfolio</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -26,7 +45,7 @@
                             <x-slot name="trigger">
                                 <span class="inline-flex rounded-md">
                                     <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                        {{ Auth::user()->currentTeam->name }}
+                                        {{ Auth::user()->currentTeam ? Auth::user()->currentTeam->name : 'No Team' }}
 
                                         <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
@@ -43,9 +62,11 @@
                                     </div>
 
                                     <!-- Team Settings -->
+                                    @if (Auth::user()->currentTeam)
                                     <x-dropdown-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}">
                                         {{ __('Team Settings') }}
                                     </x-dropdown-link>
+                                    @endif
 
                                     @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
                                         <x-dropdown-link href="{{ route('teams.create') }}">
@@ -142,6 +163,25 @@
             <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            <!-- Trading Section -->
+            <div class="border-t border-gray-200 pt-2">
+                <div class="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Trading
+                </div>
+                <x-responsive-nav-link href="{{ route('orders.create') }}" :active="request()->routeIs('orders.create')">
+                    Place Order
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('trades.my-trades') }}" :active="request()->routeIs('trades.my-trades')">
+                    My Trades
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('trades.my-statistics') }}" :active="request()->routeIs('trades.my-statistics')">
+                    Trade Statistics
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('portfolio.index') }}" :active="request()->routeIs('portfolio.index')">
+                    Portfolio
+                </x-responsive-nav-link>
+            </div>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -190,9 +230,11 @@
                     </div>
 
                     <!-- Team Settings -->
+                    @if (Auth::user()->currentTeam)
                     <x-responsive-nav-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}" :active="request()->routeIs('teams.show')">
                         {{ __('Team Settings') }}
                     </x-responsive-nav-link>
+                    @endif
 
                     @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
                         <x-responsive-nav-link href="{{ route('teams.create') }}" :active="request()->routeIs('teams.create')">

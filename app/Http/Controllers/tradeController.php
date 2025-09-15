@@ -362,7 +362,63 @@ class TradeController extends Controller
     }
 
     /**
-     * Get user's trade statistics.
+     * Show user's trade statistics page.
+     */
+    public function showUserStatistics()
+    {
+        $userId = auth()->id();
+
+        $stats = [
+            'total_trades' => Trade::where(function($q) use ($userId) {
+                $q->whereHas('buyOrder', function($q) use ($userId) {
+                    $q->where('user_id', $userId);
+                })->orWhereHas('sellOrder', function($q) use ($userId) {
+                    $q->where('user_id', $userId);
+                });
+            })->count(),
+
+            'total_volume' => Trade::where(function($q) use ($userId) {
+                $q->whereHas('buyOrder', function($q) use ($userId) {
+                    $q->where('user_id', $userId);
+                })->orWhereHas('sellOrder', function($q) use ($userId) {
+                    $q->where('user_id', $userId);
+                });
+            })->sum(DB::raw('price * quantity')),
+
+            'buy_trades' => Trade::whereHas('buyOrder', function($q) use ($userId) {
+                $q->where('user_id', $userId);
+            })->count(),
+
+            'sell_trades' => Trade::whereHas('sellOrder', function($q) use ($userId) {
+                $q->where('user_id', $userId);
+            })->count(),
+
+            'total_fees' => Trade::where(function($q) use ($userId) {
+                $q->whereHas('buyOrder', function($q) use ($userId) {
+                    $q->where('user_id', $userId);
+                })->orWhereHas('sellOrder', function($q) use ($userId) {
+                    $q->where('user_id', $userId);
+                });
+            })->sum('fee'),
+
+            'by_market' => Trade::where(function($q) use ($userId) {
+                $q->whereHas('buyOrder', function($q) use ($userId) {
+                    $q->where('user_id', $userId);
+                })->orWhereHas('sellOrder', function($q) use ($userId) {
+                    $q->where('user_id', $userId);
+                });
+            })
+            ->join('markets', 'trades.market_id', '=', 'markets.id')
+            ->selectRaw('markets.base_asset, markets.quote_asset, COUNT(*) as count, SUM(price * quantity) as volume')
+            ->groupBy('markets.id', 'markets.base_asset', 'markets.quote_asset')
+            ->get(),
+        ];
+
+        return view('trades.statistics', compact('stats'));
+    }
+
+    /**
+     * Get user's trade statistics (API).
      */
     public function userStatistics()
     {
@@ -470,20 +526,20 @@ class TradeController extends Controller
                 'Quantity', 'Total', 'Fee', 'Trade Time'
             ]);
 
-            // Add data rows
-            foreach ($trades as $trade) {
-                fputcsv($file, [
-                    $trade->id,
-                    $trade->market->symbol,
-                    $trade->buyOrder->user->name,
-                    $trade->sellOrder->user->name,
-                    $trade->price,
-                    $trade->quantity,
-                    $trade->price * $trade->quantity,
-                    $trade->fee,
-                    $trade->trade_time,
-                ]);
-            }
+        // Add data rows
+        foreach ($trades as $trade) {
+            fputcsv($file, [
+                $trade->id,
+                $trade->market->base_asset . '/' . $trade->market->quote_asset,
+                $trade->buyOrder->user->name ?? 'Unknown',
+                $trade->sellOrder->user->name ?? 'Unknown',
+                $trade->price,
+                $trade->quantity,
+                $trade->price * $trade->quantity,
+                $trade->fee,
+                $trade->trade_time,
+            ]);
+        }
 
             fclose($file);
         };

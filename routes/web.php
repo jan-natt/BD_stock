@@ -317,6 +317,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     // User trade management
     Route::get('/my-trades', [TradeController::class, 'myTrades'])->name('trades.my-trades');
+    Route::get('/my-trade-statistics', [TradeController::class, 'showUserStatistics'])->name('trades.my-statistics');
     Route::get('/trades/{trade}', [TradeController::class, 'show'])->name('trades.show');
     Route::get('/api/trades/statistics', [TradeController::class, 'userStatistics'])->name('api.trades.statistics');
 });

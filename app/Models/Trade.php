@@ -13,6 +13,8 @@ class Trade extends Model
     protected $fillable = [
         'buy_order_id',
         'sell_order_id',
+           'buyer_id',       // Add this
+    'seller_id',
         'market_id',
         'price',
         'quantity',

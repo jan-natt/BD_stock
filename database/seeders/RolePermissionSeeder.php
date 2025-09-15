@@ -3,28 +3,53 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\RolePermission;
 use App\Models\Role;
 use App\Models\Permission;
+use Illuminate\Support\Facades\DB;
 
 class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        $roles = Role::all();
-        $permissions = Permission::all();
+        // Clear existing role-permission relationships
+        DB::table('role_permissions')->delete();
 
-        foreach ($roles as $role) {
-            // প্রতিটি role কে সব permissions assign
-            foreach ($permissions as $permission) {
-                RolePermission::firstOrCreate([
-                    'role_id' => $role->id,
-                    'permission_id' => $permission->id,
-                ]);
-            }
+        // Get roles and permissions
+        $admin = Role::where('role_name', 'admin')->first();
+        $buyer = Role::where('role_name', 'buyer')->first();
+        $seller = Role::where('role_name', 'seller')->first();
+        $issueManager = Role::where('role_name', 'issue_manager')->first();
+
+        $allPermissions = Permission::all();
+        $viewDashboard = Permission::where('permission_name', 'view_dashboard')->first();
+        $tradeAssets = Permission::where('permission_name', 'trade_assets')->first();
+        $createAssets = Permission::where('permission_name', 'create_assets')->first();
+        $manageIpo = Permission::where('permission_name', 'manage_ipo')->first();
+        $manageUsers = Permission::where('permission_name', 'manage_users')->first();
+        $manageRoles = Permission::where('permission_name', 'manage_roles')->first();
+        $managePermissions = Permission::where('permission_name', 'manage_permissions')->first();
+
+        // Assign permissions to roles appropriately
+        if ($admin && $allPermissions->isNotEmpty()) {
+            $admin->permissions()->sync($allPermissions->pluck('id'));
         }
 
-        // Optionally, আরও random assignments করতে পারো
-        RolePermission::factory()->count(10)->create();
+        if ($buyer && $viewDashboard && $tradeAssets) {
+            $buyer->permissions()->sync([$viewDashboard->id, $tradeAssets->id]);
+        }
+
+        if ($seller && $viewDashboard && $createAssets) {
+            $seller->permissions()->sync([$viewDashboard->id, $createAssets->id]);
+        }
+
+        if ($issueManager && $viewDashboard && $manageIpo) {
+            $issueManager->permissions()->sync([$viewDashboard->id, $manageIpo->id]);
+        }
+
+        $this->command->info('Role permissions seeded successfully!');
+        $this->command->info('Admin has all permissions');
+        $this->command->info('Buyer can view dashboard and trade assets');
+        $this->command->info('Seller can view dashboard and create assets');
+        $this->command->info('Issue Manager can view dashboard and manage IPOs');
     }
 }

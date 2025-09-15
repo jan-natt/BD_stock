@@ -11,16 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-          Schema::create('trades', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('buy_order_id')->constrained('orders')->onDelete('cascade');
-            $table->foreignId('sell_order_id')->constrained('orders')->onDelete('cascade');
-            $table->foreignId('market_id')->constrained('markets')->onDelete('cascade');
-            $table->decimal('price', 20, 8);
-            $table->decimal('quantity', 20, 8);
-            $table->decimal('fee', 20, 8)->default(0);
-            $table->timestamp('trade_time');
-        });
+         Schema::create('trades', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('buy_order_id')->constrained('orders')->onDelete('cascade');
+    $table->foreignId('sell_order_id')->constrained('orders')->onDelete('cascade');
+    $table->foreignId('market_id')->constrained('markets')->onDelete('cascade');
+    $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade'); // Add this
+    $table->foreignId('seller_id')->nullable()->constrained('users')->onDelete('cascade'); // Add this
+    $table->decimal('price', 20, 8);
+    $table->decimal('quantity', 20, 8);
+    $table->decimal('fee', 20, 8)->default(0);
+    $table->timestamp('trade_time');
+
+    $table->timestamps();
+});
     }
 
     /**

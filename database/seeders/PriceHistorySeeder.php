@@ -9,6 +9,6 @@ class PriceHistorySeeder extends Seeder
 {
     public function run(): void
     {
-        PriceHistory::factory()->count(20)->create(); // 100 টা রেকর্ড
+        PriceHistory::factory()->count(10)->create(); // 100 টা রেকর্ড
     }
 }

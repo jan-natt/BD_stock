@@ -6,6 +6,7 @@ use App\Models\Trade;
 use App\Models\Order;
 use App\Models\Market;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -152,8 +153,10 @@ class TradeController extends Controller
         $validated = $request->validate([
             'buy_order_id' => 'required|exists:orders,id',
             'sell_order_id' => 'required|exists:orders,id',
+            
             'price' => 'required|numeric|min:0.00000001',
             'quantity' => 'required|numeric|min:0.00000001',
+
         ]);
 
         try {
@@ -254,6 +257,9 @@ class TradeController extends Controller
             'buy_order_id' => $buyOrder->id,
             'sell_order_id' => $sellOrder->id,
             'market_id' => $buyOrder->market_id,
+              'buyer_id' => $buyOrder->user_id,    // Get buyer ID from buy order
+    'seller_id' => $sellOrder->user_id, 
+
             'price' => $price,
             'quantity' => $quantity,
             'fee' => $fee,

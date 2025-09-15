@@ -24,7 +24,7 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\UserRoleController;
-
+use App\Http\Controllers\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,48 +41,10 @@ Route::get('/about', function () {
 });
 
 // Authenticated users
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified'
-])->group(function () {
-
-    // Redirect to role-specific dashboard
-    Route::get('/dashboard', function () {
-        $user = auth()->user();
-
-        switch ($user->user_type) {
-            case 'admin':
-                return redirect()->route('admin.dashboard');
-            case 'buyer':
-                return redirect()->route('buyer.dashboard');
-            case 'seller':
-                return redirect()->route('seller.dashboard');
-            default:
-                abort(403, 'Unauthorized');
-        }
-    })->name('dashboard');
-
+Route::middleware(['auth'])->group(function () {
+    // Single dashboard route for all users
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
-
-// Admin routes
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-    // Add more admin routes here
-});
-
-// Buyer routes
-Route::middleware(['auth', 'role:buyer'])->group(function () {
-    Route::get('/buyer/dashboard', [BuyerController::class, 'index'])->name('buyer.dashboard');
-    // Add more buyer routes here
-});
-
-// Seller routes
-Route::middleware(['auth', 'role:seller'])->group(function () {
-    Route::get('/seller/dashboard', [SellerController::class, 'index'])->name('seller.dashboard');
-    // Add more seller routes here
-});
-
 
 
 // Or define individual routes with custom middleware

@@ -9,6 +9,6 @@ class TradeSeeder extends Seeder
 {
     public function run(): void
     {
-        Trade::factory()->count(30)->create(); // 30টি ফেইক ট্রেড
+        Trade::factory()->count(3)->create(); // 30টি ফেইক ট্রেড
     }
 }

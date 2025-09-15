@@ -11,6 +11,8 @@ class IPO extends Model
 {
     use HasFactory;
 
+       protected $table = 'ipos';
+
     protected $fillable = [
         'company_name',
         'symbol',

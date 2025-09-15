@@ -10,6 +10,8 @@ class IPOApplication extends Model
 {
     use HasFactory;
 
+    protected $table = 'ipo_applications';
+
     protected $fillable = [
         'user_id',
         'ipo_id',

@@ -15,129 +15,74 @@ class SystemSetting extends Model
     protected $fillable = [
         'key',
         'value',
-        'category',
-        'type',
-        'description',
-        'options',
-        'is_encrypted',
-        'is_public',
-        'is_protected',
-        'min_value',
-        'max_value',
-        'validation_rules',
     ];
 
     protected $casts = [
-        'is_encrypted' => 'boolean',
-        'is_public' => 'boolean',
-        'is_protected' => 'boolean',
-        'min_value' => 'decimal:8',
-        'max_value' => 'decimal:8',
+        // Remove all the casts that require missing columns
     ];
 
     /**
      * Get the decrypted value if encrypted.
+     * Modified to always return value since is_encrypted column doesn't exist
      */
     public function getDecryptedValueAttribute()
     {
-        return $this->is_encrypted ? decrypt($this->value) : $this->value;
+        return $this->value; // Always return value as-is
     }
 
     /**
-     * Get the typed value based on type.
+     * Get the typed value based on key or content.
      */
     public function getTypedValueAttribute()
     {
-        $value = $this->decrypted_value;
+        $value = $this->value;
 
-        switch ($this->type) {
-            case 'boolean':
-                return filter_var($value, FILTER_VALIDATE_BOOLEAN);
-            case 'integer':
-                return (int)$value;
-            case 'decimal':
-                return (float)$value;
-            case 'array':
-            case 'json':
-                return json_decode($value, true);
-            case 'select':
-                return $value; // Return as string for select
-            default:
-                return $value;
+        // You can implement type detection based on key patterns or content
+        if (is_numeric($value)) {
+            return (float)$value;
         }
+        
+        if ($value === 'true' || $value === 'false') {
+            return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+        }
+        
+        if ($this->isJson($value)) {
+            return json_decode($value, true);
+        }
+        
+        return $value;
+    }
+
+    /**
+     * Check if string is valid JSON
+     */
+    private function isJson($string)
+    {
+        json_decode($string);
+        return json_last_error() === JSON_ERROR_NONE;
     }
 
     /**
      * Scope a query to only include public settings.
+     * Modified: Since is_public column doesn't exist, return all or implement alternative logic
      */
     public function scopePublic($query)
     {
-        return $query->where('is_public', true);
+        // Option 1: Return all settings (no filtering)
+        return $query;
+        
+        // Option 2: Implement alternative logic if you have a way to identify public settings
+        // For example, if public settings have specific key patterns:
+        // return $query->where('key', 'like', 'public.%');
     }
 
     /**
-     * Scope a query to only include settings of a specific category.
+     * Remove all scopes and methods that depend on missing columns
      */
-    public function scopeOfCategory($query, $category)
-    {
-        return $query->where('category', $category);
-    }
-
-    /**
-     * Scope a query to only include settings of a specific type.
-     */
-    public function scopeOfType($query, $type)
-    {
-        return $query->where('type', $type);
-    }
-
-    /**
-     * Scope a query to only include encrypted settings.
-     */
-    public function scopeEncrypted($query)
-    {
-        return $query->where('is_encrypted', true);
-    }
-
-    /**
-     * Scope a query to only include protected settings.
-     */
-    public function scopeProtected($query)
-    {
-        return $query->where('is_protected', true);
-    }
-
-    /**
-     * Get options as array for select type.
-     */
-    public function getOptionsArrayAttribute()
-    {
-        if (empty($this->options)) {
-            return [];
-        }
-
-        return array_map('trim', explode(',', $this->options));
-    }
-
-    /**
-     * Check if setting has options.
-     */
-    public function getHasOptionsAttribute()
-    {
-        return !empty($this->options);
-    }
-
-    /**
-     * Get validation rules array.
-     */
-    public function getValidationRulesArrayAttribute()
-    {
-        if (empty($this->validation_rules)) {
-            return [];
-        }
-
-        return explode('|', $this->validation_rules);
-    }
+    
+    // Remove these methods since they depend on missing columns:
+    // scopeOfCategory(), scopeOfType(), scopeEncrypted(), scopeProtected()
+    // getOptionsArrayAttribute(), getHasOptionsAttribute(), getValidationRulesArrayAttribute()
 
     /**
      * Get all settings from cache or database.
@@ -153,6 +98,7 @@ class SystemSetting extends Model
 
     /**
      * Get public settings from cache or database.
+     * Modified to use the updated scopePublic()
      */
     public static function getPublicCached()
     {
@@ -210,28 +156,11 @@ class SystemSetting extends Model
     }
 
     /**
-     * Get all settings of a category.
-     */
-    public static function getCategory($category)
-    {
-        $settings = self::getCached();
-        return collect($settings)->filter(function ($value, $key) use ($category) {
-            $setting = self::where('key', $key)->first();
-            return $setting && $setting->category === $category;
-        });
-    }
-
-    /**
      * Boot method for model events.
      */
     protected static function boot()
     {
         parent::boot();
-
-        static::saving(function ($model) {
-            // Validate value based on type before saving
-            $model->validateValue();
-        });
 
         static::saved(function ($model) {
             // Clear cache when settings are updated
@@ -246,12 +175,5 @@ class SystemSetting extends Model
         });
     }
 
-    /**
-     * Validate the setting value based on type.
-     */
-    public function validateValue()
-    {
-        // This would implement validation logic similar to the controller method
-        // You can use Laravel's validator here
-    }
+    // Remove the validateValue() method since it depends on missing validation rules
 }

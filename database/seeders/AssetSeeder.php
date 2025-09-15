@@ -23,6 +23,6 @@ class AssetSeeder extends Seeder
         }
 
         // Random কিছু extra asset generate করবে
-        Asset::factory()->count(10)->create();
+        Asset::factory()->count(5)->create();
     }
 }

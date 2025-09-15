@@ -9,6 +9,6 @@ class IpoApplicationSeeder extends Seeder
 {
     public function run(): void
     {
-        IpoApplication::factory()->count(20)->create();
+        IpoApplication::factory()->count(10)->create();
     }
 }

@@ -13,19 +13,14 @@ class TradeFactory extends Factory
 
     public function definition(): array
     {
-        $market = Market::inRandomOrder()->first() ?? Market::factory()->create();
-
-        // একটা buy এবং sell order খুঁজে বের করা
-        $buyOrder = Order::where('order_type', 'buy')->inRandomOrder()->first() ?? Order::factory()->create(['order_type' => 'buy']);
-        $sellOrder = Order::where('order_type', 'sell')->inRandomOrder()->first() ?? Order::factory()->create(['order_type' => 'sell']);
-
         $price = $this->faker->randomFloat(8, 10, 50000);
         $quantity = $this->faker->randomFloat(8, 0.001, 2);
 
         return [
-            'buy_order_id' => $buyOrder->id,
-            'sell_order_id' => $sellOrder->id,
-            'market_id' => $market->id,
+            'buyer_id' => \App\Models\User::factory(),
+            'buy_order_id' => Order::factory()->create(['order_type' => 'buy'])->id,
+            'sell_order_id' => Order::factory()->create(['order_type' => 'sell'])->id,
+            'market_id' => Market::factory(),
             'price' => $price,
             'quantity' => $quantity,
             'fee' => $quantity * $price * 0.001, // 0.1% fee ধরলাম

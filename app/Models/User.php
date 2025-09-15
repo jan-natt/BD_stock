@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
+use App\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -64,11 +66,7 @@ class User extends Authenticatable
         return $this->hasMany(Wallet::class);
     }
 
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class);
-    }
-
+ 
 
     public function isAdmin()
 {
@@ -169,6 +167,34 @@ public function readNotifications(): HasMany
 {
     return $this->notifications()->where('is_read', true);
 }
+public function assets(): HasMany
+{
+    return $this->hasMany(Asset::class);
+}
+
+    /**
+     * Get the trades for the user (for buyers/sellers)
+     */
+    public function trades(): HasMany
+    {
+        return $this->hasMany(Trade::class);
+    }
+
+    /**
+     * Get the transactions for the user
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * Get the portfolio for the user (for buyers)
+     */
+    public function portfolio(): HasMany
+    {
+        return $this->hasMany(Portfolio::class);
+    }
 
 
 }

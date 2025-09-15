@@ -14,6 +14,7 @@ class Asset extends Model
         'symbol',
         'name',
         'type',
+        'user_id',
         'precision',
         'status'
     ];
@@ -31,13 +32,7 @@ class Asset extends Model
         return $this->hasMany(MarketData::class);
     }
 
-    /**
-     * Get the trades for the asset.
-     */
-    public function trades(): HasMany
-    {
-        return $this->hasMany(Trade::class);
-    }
+
 
     /**
      * Get the wallets for the asset.

@@ -12,14 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('assets', function (Blueprint $table) {
-            $table->id();
-            $table->string('symbol')->unique();
-            $table->string('name');
-            $table->enum('type', ['stock','crypto','forex','commodity','ipo']);
-            $table->integer('precision')->default(8);
-            $table->boolean('status')->default(true);
-            $table->timestamps();
-        });
+        $table->id();
+        $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+        $table->string('symbol');
+        $table->string('name');
+        $table->enum('type', ['stock', 'crypto', 'forex', 'commodity', 'ipo']);
+        $table->integer('precision')->default(8);
+        $table->boolean('status')->default(true);
+        $table->timestamps();
+        
+        // Add indexes
+        $table->index('symbol');
+        $table->index('user_id');
+    });
     }
 
     /**

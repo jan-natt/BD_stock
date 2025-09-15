@@ -106,8 +106,8 @@ class AssetController extends Controller
     public function show(Asset $asset)
     {
         // Load additional data based on asset type
-        $asset->loadCount(['marketData', 'trades']);
-        
+        $asset->loadCount(['marketData']);
+
         return view('assets.show', compact('asset'));
     }
 
@@ -197,7 +197,9 @@ class AssetController extends Controller
     protected function isAssetInUse(Asset $asset): bool
     {
         // Check if asset has trades
-        if ($asset->trades()->exists()) {
+        if (\App\Models\Trade::whereHas('market', function($q) use ($asset) {
+            $q->where('base_asset', $asset->id)->orWhere('quote_asset', $asset->id);
+        })->exists()) {
             return true;
         }
 
@@ -212,6 +214,7 @@ class AssetController extends Controller
         // }
 
         return false;
+
     }
 
     /**

@@ -9,14 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-       Schema::create('permissions', function (Blueprint $table) {
-            $table->id();
-            $table->string('permission_name');
-            $table->timestamps();
-        });
-    }
+   public function up(): void
+{
+    Schema::create('permissions', function (Blueprint $table) {
+        $table->id();
+        $table->string('permission_name');
+        $table->string('description')->nullable();
+        $table->string('category')->nullable();
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.

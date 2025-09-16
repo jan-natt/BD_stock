@@ -35,9 +35,10 @@ class DashboardController extends Controller
     private function adminDashboard()
     {
         $stats = [
-            'total_users' => User::count(),
-            'total_trades' => Trade::count(),
-            'revenue' => Transaction::sum('amount'),
+            'total_users' => \App\Models\User::count(),
+            'total_trades' => \App\Models\Trade::count(),
+            'revenue' => \App\Models\Transaction::sum('amount'),
+            'active_markets' => \App\Models\Market::where('status', true)->count(),
         ];
         
         return view('dashboard.admin', compact('stats'));
@@ -45,14 +46,22 @@ class DashboardController extends Controller
 
     private function buyerDashboard()
     {
-        $portfolio = auth()->user()->portfolio;
+        $portfolioItems = auth()->user()->portfolio;
+        $totalPortfolioValue = $portfolioItems->sum(function($item) {
+            return $item->current_value;
+        });
+        $totalAssets = $portfolioItems->count();
+
         $recentTrades = \App\Models\Trade::where('buyer_id', auth()->id())
             ->orWhere('seller_id', auth()->id())
             ->latest('trade_time')
             ->take(5)
             ->get();
 
-        return view('dashboard.buyer', compact('portfolio', 'recentTrades'));
+        $wallet = auth()->user()->wallets()->first();
+        $walletBalance = $wallet ? $wallet->balance : 0;
+
+        return view('buyer.dashboard', compact('portfolioItems', 'totalPortfolioValue', 'totalAssets', 'recentTrades', 'walletBalance'));
     }
 
     private function sellerDashboard()

@@ -343,15 +343,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ipos/public', [IPOController::class, 'public'])->name('ipos.public');
     Route::get('/ipos/{ipo}', [IPOController::class, 'show'])->name('ipos.show');
     Route::get('/my-ipo-subscriptions', [IPOController::class, 'mySubscriptions'])->name('ipos.my-subscriptions');
-    
+
     // Subscription routes
     Route::post('/ipos/{ipo}/subscribe', [IPOController::class, 'subscribe'])->name('ipos.subscribe');
     Route::post('/ipos/{ipo}/cancel-subscription', [IPOController::class, 'cancelSubscription'])->name('ipos.cancel-subscription');
+
+    // IPO management for issue managers
+    Route::get('/ipos', [IPOController::class, 'index'])->name('ipos.index');
 });
 
-// Admin and issue manager routes
+// Admin only routes
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/ipos', [IPOController::class, 'index'])->name('ipos.index');
     Route::get('/ipos/create', [IPOController::class, 'create'])->name('ipos.create');
     Route::post('/ipos', [IPOController::class, 'store'])->name('ipos.store');
     Route::get('/ipos/{ipo}/edit', [IPOController::class, 'edit'])->name('ipos.edit');
@@ -371,13 +373,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/my-ipo-applications', [IPOApplicationController::class, 'myApplications'])->name('ipo-applications.my-applications');
     Route::get('/ipo-applications/create', [IPOApplicationController::class, 'create'])->name('ipo-applications.create');
     Route::post('/ipo-applications', [IPOApplicationController::class, 'store'])->name('ipo-applications.store');
+    Route::get('/ipo-applications/{application}/edit', [IPOApplicationController::class, 'edit'])->name('ipo-applications.edit');
+    Route::put('/ipo-applications/{application}', [IPOApplicationController::class, 'update'])->name('ipo-applications.update');
     Route::get('/ipo-applications/{application}', [IPOApplicationController::class, 'show'])->name('ipo-applications.show');
     Route::post('/ipo-applications/{application}/cancel', [IPOApplicationController::class, 'cancel'])->name('ipo-applications.cancel');
+
+    // IPO applications management for issue managers
+    Route::get('/ipo-applications', [IPOApplicationController::class, 'index'])->name('ipo-applications.index');
 });
 
-// Admin and issue manager routes
+// Admin only routes
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/ipo-applications', [IPOApplicationController::class, 'index'])->name('ipo-applications.index');
     Route::post('/ipo-applications/{application}/allocate', [IPOApplicationController::class, 'allocate'])->name('ipo-applications.allocate');
     Route::post('/ipo-applications/{application}/reject', [IPOApplicationController::class, 'reject'])->name('ipo-applications.reject');
     Route::post('/ipos/{ipo}/bulk-process', [IPOApplicationController::class, 'bulkProcess'])->name('ipo-applications.bulk-process');

@@ -10,6 +10,8 @@ class IPOSubscription extends Model
 {
     use HasFactory;
 
+    protected $table = 'ipo_subscriptions';
+
     protected $fillable = [
         'ipo_id',
         'user_id',
@@ -30,7 +32,7 @@ class IPOSubscription extends Model
      */
     public function ipo(): BelongsTo
     {
-        return $this->belongsTo(IPO::class);
+        return $this->belongsTo(IPO::class, 'ipo_id');
     }
 
     /**

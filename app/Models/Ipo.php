@@ -51,7 +51,7 @@ class IPO extends Model
      */
     public function subscriptions(): HasMany
     {
-        return $this->hasMany(IPOSubscription::class);
+        return $this->hasMany(IPOSubscription::class, 'ipo_id');
     }
 
     /**
@@ -94,8 +94,8 @@ class IPO extends Model
      */
     public function isActive(): bool
     {
-        return $this->status === 'open' && 
-               now() >= $this->ipo_start && 
+        return $this->status === 'open' &&
+               now() >= $this->ipo_start &&
                now() <= $this->ipo_end;
     }
 
